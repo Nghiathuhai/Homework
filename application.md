@@ -1,10 +1,3 @@
-# Cẩm Nang Chuyên Sâu Mạng Máy Tính & Web Protocols (Network & Web Protocols Deep Dive)
-
-> **Tài liệu tham khảo kỹ thuật chuyên sâu dành cho Software Engineer / DevOps / Solution Architect**
-> *Phong cách biên soạn: Chuẩn mực, chuyên sâu, trực quan hóa với sơ đồ Mermaid, bóc tách header từng bit và phân tích gói tin Wireshark.*
-
----
-
 ## 📑 Mục Lục
 1. [Phân Tích Chuyên Sâu: TCP vs UDP](#1-phân-tích-chuyên-sâu-tcp-vs-udp)
    - [1.1 Cấu trúc Header TCP & UDP](#11-cấu-trúc-header-tcp--udp)
