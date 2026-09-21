@@ -1,55 +1,10 @@
-## 📑 Mục Lục
-1. [Phân Tích Chuyên Sâu: TCP vs UDP](#1-phân-tích-chuyên-sâu-tcp-vs-udp)
-   - [1.1 Cấu trúc Header TCP & UDP](#11-cấu-trúc-header-tcp--udp)
-   - [1.2 Phân tích chi tiết các TCP Flags](#12-phân-tích-chi-tiết-các-tcp-flags)
-   - [1.3 Cơ chế hoạt động của Sequence Number & Acknowledgment Number](#13-cơ-chế-hoạt-động-của-sequence-number--acknowledgment-number)
-   - [1.4 Quá trình Thiết lập (3-Way Handshake) & Giải phóng (4-Way Handshake)](#14-quá-trình-thiết-lập-3-way-handshake--giải-phóng-4-way-handshake)
-   - [1.5 Điều khiển Luồng (Flow Control) & Điều khiển Tắc nghẽn (Congestion Control)](#15-điều-khiển-luồng-flow-control--điều-khiển-tắc-nghẽn-congestion-control)
-   - [1.6 Bảng so sánh tổng quan & Use Cases: Khi nào dùng và không dùng](#16-bảng-so-sánh-tổng-quan--use-cases-khi-nào-dùng-và-không-dùng)
-2. [Quá Trình Phân Giải Tên Miền (DNS Resolution Deep Dive)](#2-quá-trình-phân-giải-tên-miền-dns-resolution-deep-dive)
-   - [2.1 Cây phân cấp DNS (DNS Hierarchy)](#21-cây-phân-cấp-dns-dns-hierarchy)
-   - [2.2 Phân biệt Recursive Query vs Iterative Query](#22-phân-biệt-recursive-query-vs-iterative-query)
-   - [2.3 Chi tiết 8 bước phân giải DNS từng chặng](#23-chi-tiết-8-bước-phân-giải-dns-từng-chặng)
-   - [2.4 Các loại DNS Record phổ biến & Cơ chế Caching (TTL)](#24-các-loại-dns-record-phổ-biến--cơ-chế-caching-ttl)
-3. [Vòng Đời Hoàn Chỉnh Của Một HTTP Request (Client to Server)](#3-vòng-đời-hoàn-chỉnh-của-một-http-request-client-to-server)
-   - [3.1 Mô hình bức tranh toàn cảnh (End-to-End Architecture)](#31-mô-hình-bức-tranh-toàn-cảnh-end-to-end-architecture)
-   - [3.2 Chi tiết 10 giai đoạn từ URL đến Render giao diện](#32-chi-tiết-10-giai-đoạn-từ-url-đến-render-giao-diện)
-   - [3.3 Bóc tách gói tin qua các tầng mô hình TCP/IP (Encapsulation)](#33-bóc-tách-gói-tin-qua-các-tầng-mô-hình-tcpip-encapsulation)
-4. [Bảo Mật Tầng Giao Vận: Quá Trình TLS Handshake (HTTPS)](#4-bảo-mật-tầng-giao-vận-quá-trình-tls-handshake-https)
-   - [4.1 Nền tảng mật mã học: Đối xứng, Bất đối xứng và PKI / Digital Certificate](#41-nền-tảng-mật-mã-học-đối-xứng-bất-đối-xứng-và-pki--digital-certificate)
-   - [4.2 TLS 1.2 Handshake: 2-RTT Chi tiết từng bản tin](#42-tls-12-handshake-2-rtt-chi-tiết-từng-bản-tin)
-   - [4.3 TLS 1.3 Handshake: 1-RTT / 0-RTT & Bước nhảy vọt hiệu năng](#43-tls-13-handshake-1-rtt--0-rtt--bước-nhảy-vọt-hiệu-năng)
-5. [Tiến Hóa Của Giao Thức Web: So Sánh HTTP/1.0, HTTP/1.1 và HTTP/2](#5-tiến-hóa-của-giao-thức-web-so-sánh-http10-http11-và-http2)
-   - [5.1 HTTP/1.0: Khởi nguyên & Giới hạn Short-lived Connection](#51-http10-khởi-nguyên--giới-hạn-short-lived-connection)
-   - [5.2 HTTP/1.1: Persistent Connection, Pipelining & Head-of-Line Blocking](#52-http11-persistent-connection-pipelining--head-of-line-blocking)
-   - [5.3 HTTP/2: Binary Framing, Multiplexing, HPACK & Server Push](#53-http2-binary-framing-multiplexing-hpack--server-push)
-   - [5.4 Sơ đồ so sánh trực quan cơ chế truyền tải dữ liệu](#54-sơ-đồ-so-sánh-trực-quan-cơ-chế-truyền-tải-dữ-liệu)
-   - [5.5 Nhìn nhanh về HTTP/3 (QUIC) & Bảng so sánh tổng hợp](#55-nhìn-nhanh-về-http3-quic--bảng-so-sánh-tổng-hợp)
-6. [Cẩm Nang Bắt Và Phân Tích Gói Tin Bằng Wireshark](#6-cẩm-nang-bắt-và-phân-tích-gói-tin-bằng-wireshark)
-   - [6.1 Danh sách Wireshark Display Filters thông dụng](#61-danh-sách-wireshark-display-filters-thông-dụng)
-   - [6.2 Phân tích mẫu một phiên làm việc thực tế trên Wireshark](#62-phân-tích-mẫu-một-phiên-làm-việc-thực-tế-trên-wireshark)
+# 1. So sánh sự khác biệt giữa TCP vs UDP
 
----
+Cả **TCP** và **UDP** đều là giao thức chính hoạt động tại **Transport Layer**. Nhiệm vụ chính của tầng này là cung cấp cơ chế giao tiếp End-to-End giữa các tiến trình chạy trên các máy chủ khác nhau thông qua số cổng.
 
-# 1. Phân Tích Chuyên Sâu: TCP vs UDP
-
-Cả **TCP (Transmission Control Protocol - RFC 793)** và **UDP (User Datagram Protocol - RFC 768)** đều là giao thức cốt lõi hoạt động tại **Transport Layer (Tầng 4 trong mô hình OSI)**. Nhiệm vụ chính của tầng này là cung cấp cơ chế giao tiếp End-to-End giữa các tiến trình (Process-to-Process) chạy trên các máy chủ khác nhau thông qua **Port Numbers**.
-
-Tuy nhiên, triết lý thiết kế của hai giao thức này hoàn toàn trái ngược nhau:
+Nguyên lý hoạt động của hai giao thức này hoàn toàn ngược nhau:
 * **TCP:** Ưu tiên **độ tin cậy tuyệt đối (Reliability)**, đảm bảo toàn vẹn dữ liệu, đúng thứ tự, kiểm soát tốc độ truyền để tránh nghẽn mạng.
 * **UDP:** Ưu tiên **tốc độ tối đa và độ trễ tối thiểu (Low Latency)**, thiết kế dạng "Best-effort" (gửi và quên - Fire and Forget), không thiết lập kết nối trước, không bảo đảm dữ liệu có tới đích hay không.
-
-```mermaid
-graph TD
-    subgraph "Transport Layer (Layer 4)"
-        App[Application Layer Data] --> Router{Lựa chọn Giao Thức}
-        Router -->|Cần Tin Cậy & Toàn Vẹn| TCP[TCP - Connection Oriented]
-        Router -->|Cần Tốc Độ & Real-time| UDP[UDP - Connectionless]
-        
-        TCP --> TCP_Feat["- 3-Way Handshake<br/>- Byte Stream & Seq/Ack<br/>- Retransmission (ARQ)<br/>- Flow & Congestion Control"]
-        UDP --> UDP_Feat["- No Handshake<br/>- Datagram Packet<br/>- No Retransmission<br/>- No Overhead"]
-    end
-```
 
 ---
 
@@ -60,8 +15,6 @@ graph TD
 Header TCP có kích thước tối thiểu **20 bytes** (khi không có Options) và tối đa **60 bytes** (khi trường Options đạt cực đại 40 bytes).
 
 ```text
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |          Source Port          |       Destination Port        | (4 bytes)
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -69,9 +22,9 @@ Header TCP có kích thước tối thiểu **20 bytes** (khi không có Options
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                    Acknowledgment Number                      | (4 bytes)
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|  Data |           |U|A|P|R|S|F|                               |
-| Offset| Reserved  |R|C|S|S|Y|I|            Window             | (4 bytes)
-| (4bit)|  (6 bit)  |G|K|H|T|N|N|                               |
+|  Data  |                                                      |
+| Offset | Reserved                        Window Size          | (4 bytes)
+| (4 bit)|  (6 bit)                                             |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |           Checksum            |        Urgent Pointer         | (4 bytes)
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -103,8 +56,6 @@ Header TCP có kích thước tối thiểu **20 bytes** (khi không có Options
 Header UDP cực kỳ tối giản, chỉ vỏn vẹn **8 bytes** (nhẹ hơn TCP Header tới 2.5 - 7.5 lần):
 
 ```text
- 0                   1                   2                   3
- 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |          Source Port          |       Destination Port        | (4 bytes)
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -124,25 +75,23 @@ Header UDP cực kỳ tối giản, chỉ vỏn vẹn **8 bytes** (nhẹ hơn TC
 
 Các cờ (Flags) là các bit nhị phân (0 hoặc 1) quyết định mục đích và ngữ nghĩa của TCP Segment:
 
-| Flag | Tên đầy đủ | Ý nghĩa & Cơ chế hoạt động sâu |
-| :--- | :--- | :--- |
-| **SYN** | *Synchronize* | Khởi tạo kết nối TCP. Gói tin có `SYN=1` dùng để đồng bộ Sequence Number ban đầu (ISN). Không mang payload ứng dụng nhưng tiêu tốn 1 đơn vị Sequence Number. |
-| **ACK** | *Acknowledgment* | Xác nhận đã nhận được dữ liệu. Khi `ACK=1`, trường `Acknowledgment Number` có hiệu lực. Trong mọi gói tin TCP sau bước handshake đầu tiên, bit `ACK` luôn luôn được bật (`ACK=1`). |
-| **FIN** | *Finish* | Yêu cầu đóng kết nối một cách êm đẹp (Graceful Teardown). Bên gửi thông báo rằng họ đã gửi xong toàn bộ dữ liệu và sẽ không truyền thêm byte nào nữa (nhưng vẫn có thể nhận dữ liệu). Tiêu tốn 1 Sequence Number. |
-| **RST** | *Reset* | Buộc đóng kết nối ngay lập tức (Abrupt Termination) mà không cần qua quy trình bắt tay 4 bước. Thường xuất hiện khi: kết nối gửi tới cổng không mở (Port Closed), kết nối bị crash, vi phạm giao thức, hoặc can thiệp từ Firewall/Security appliance. |
-| **PSH** | *Push* | Yêu cầu TCP Receiver đẩy ngay lập tức toàn bộ dữ liệu trong Receive Buffer lên Application Layer mà không cần chờ buffer đầy. Thường dùng trong các ứng dụng tương tác như SSH, Telnet, hoặc bản tin HTTP request cuối cùng. |
-| **URG** | *Urgent* | Báo hiệu gói tin chứa dữ liệu khẩn cấp. Vị trí byte khẩn cấp được xác định bởi trường `Urgent Pointer`. Dữ liệu này được xử lý ưu tiên vượt qua hàng đợi thông thường (Ví dụ: tín hiệu `Ctrl + C` ngắt lệnh trong phiên Telnet/SSH). |
-| **ECE** | *ECN-Echo* | Báo hiệu có nghẽn mạng xảy ra từ router hỗ trợ ECN (Explicit Congestion Notification). |
-| **CWR** | *Congestion Window Reduced* | Bên gửi xác nhận đã nhận được cờ `ECE` và đã chủ động giảm kích thước cửa sổ nghẽn (`cwnd`). |
+1. **SYN** (Synchronize) - Khởi tạo kết nối TCP. Gói tin có `SYN=1` dùng để đồng bộ Sequence Number ban đầu (ISN). Không mang payload ứng dụng nhưng tiêu tốn 1 đơn vị Sequence Number.
+2. **ACK** (Acknowledgment) - Xác nhận đã nhận được dữ liệu. Khi `ACK=1`, trường `Acknowledgment Number` có hiệu lực. Trong mọi gói tin TCP sau bước handshake đầu tiên, bit `ACK` luôn luôn được bật (`ACK=1`).
+3. **FIN** (Finish) - Yêu cầu đóng kết nối một cách êm đẹp (Graceful Teardown). Bên gửi thông báo rằng họ đã gửi xong toàn bộ dữ liệu và sẽ không truyền thêm byte nào nữa (nhưng vẫn có thể nhận dữ liệu). Tiêu tốn 1 Sequence Number. 
+4. **RST** (Reset) - Buộc đóng kết nối ngay lập tức (Abrupt Termination) mà không cần qua quy trình bắt tay 4 bước. Thường xuất hiện khi: kết nối gửi tới cổng không mở (Port Closed), kết nối bị crash, vi phạm giao thức, hoặc can thiệp từ Firewall/Security appliance. 
+5. **PSH** (Push) - Yêu cầu TCP Receiver đẩy ngay lập tức toàn bộ dữ liệu trong Receive Buffer lên Application Layer mà không cần chờ buffer đầy. Thường dùng trong các ứng dụng tương tác như SSH, Telnet, hoặc bản tin HTTP request cuối cùng. 
+6. **URG** (Urgent) - Báo hiệu gói tin chứa dữ liệu khẩn cấp. Vị trí byte khẩn cấp được xác định bởi trường `Urgent Pointer`. Dữ liệu này được xử lý ưu tiên vượt qua hàng đợi thông thường (Ví dụ: tín hiệu `Ctrl + C` ngắt lệnh trong phiên Telnet/SSH). 
+7. **ECE** (ECN-Echo) - Báo hiệu có nghẽn mạng xảy ra từ router hỗ trợ ECN (Explicit Congestion Notification). 
+8. **CWR** (Congestion Window Reduced) - Bên gửi xác nhận đã nhận được cờ `ECE` và đã chủ động giảm kích thước cửa sổ nghẽn (`cwnd`). 
 
 ---
 
 ## 1.3 Cơ chế hoạt động của Sequence Number & Acknowledgment Number
 
-TCP là một **Byte-Stream Protocol** (Giao thức truyền luồng byte), nghĩa là TCP coi dữ liệu như một dòng chảy liên tục của các byte chứ không phải các gói tin độc lập.
+TCP là một **Byte-Stream Protocol**, tức là TCP coi dữ liệu như một dòng chảy liên tục của các byte chứ không phải các gói tin độc lập.
 
 ```text
-Dữ liệu ứng dụng: [ Byte 0 | Byte 1 | Byte 2 | ... | Byte 9999 ]
+Dữ liệu ứng dụng:  [ Byte 0 | Byte 1 | Byte 2 | ... | Byte 9999 ]
 TCP Segment 1:     [ Byte 0 -> Byte 1459 ]     --> Seq = 0, Length = 1460
 TCP Segment 2:     [ Byte 1460 -> Byte 2919 ]  --> Seq = 1460, Length = 1460
 ```
